@@ -26,6 +26,10 @@ def check_is_first_page_last():
     return is_first_page_last, max_page_num, pages
 
 
+def get_page(page_index):
+    return requests.get(URL + f'&start={(page_index + 1) * LIMIT}')
+
+
 def extract_jobs(last_page_num):
     jobs = []
     for page in range(last_page_num):
@@ -59,6 +63,3 @@ def extract_pages():
 
     return max_page_num
 
-
-def get_page(page_index):
-    return requests.get(URL + f'&start={(page_index + 1) * LIMIT}')
