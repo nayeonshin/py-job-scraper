@@ -36,9 +36,11 @@ def extract_jobs(last_page_num):
     """
     jobs = []
 
-    for page in range(last_page_num):
-        response = requests.get(f'{URL}&start={page*LIMIT}')
-        soup = BeautifulSoup(response.text, 'html.parser')
+    response = requests.get(f'{URL}&start={0*LIMIT}')
+    soup = BeautifulSoup(response.text, 'html.parser')
+    titles = soup.find_all('h2', class_='jobTitle')
+    for title in titles:
+        print(title.find('span', title=True).string)
 
     return jobs
 
