@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
-INDEED_URL = 'https://www.indeed.com/jobs?q=python&limit=50'
+LIMIT = 50
+URL = f'https://www.indeed.com/jobs?q=python&limit={LIMIT}'
 
 
 def extract_indeed_pages():
@@ -9,9 +10,9 @@ def extract_indeed_pages():
     max_page_num = 0
     page_index = 0
 
-    indeed_result = requests.get(INDEED_URL)
-    indeed_soup = BeautifulSoup(indeed_result.text, 'html.parser')
-    pagination = indeed_soup.find('div', class_='pagination')
+    result = requests.get(URL)
+    soup = BeautifulSoup(result.text, 'html.parser')
+    pagination = soup.find('div', class_='pagination')
     pages = pagination('li')
 
     for i in range(len(pages) - 1):  # Excludes the next button
@@ -25,9 +26,9 @@ def extract_indeed_pages():
 
     while not is_end_of_pages:
         if pages[-1].findChild()['aria-label'] == 'Next':  # There are more pages.
-            indeed_result = requests.get(INDEED_URL + f'&start={(page_index + 1) * 50}')
-            indeed_soup = BeautifulSoup(indeed_result.text, 'html.parser')
-            pagination = indeed_soup.find('div', class_='pagination')
+            result = requests.get(URL + f'&start={(page_index + 1) * 50}')
+            soup = BeautifulSoup(result.text, 'html.parser')
+            pagination = soup.find('div', class_='pagination')
             pages = pagination('li')
             for i in range(1, len(pages)):  # Excludes the previous button
                 li_child = pages[i].findChild().string
@@ -41,3 +42,13 @@ def extract_indeed_pages():
             is_end_of_pages = True
 
         page_index += 1
+
+    return max_page_num
+
+
+def extract_indeed_jobs(last_page_num):
+    jobs = []
+    for page in range(last_page_num):
+        result = requests.get(f'{URL}&start={page*LIMIT}')
+        print(result.status_code)
+    return jobs
