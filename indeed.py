@@ -26,13 +26,25 @@ def check_is_first_page_last():
     return is_first_page_last, max_page_num, pages
 
 
+def get_page(page_index):
+    return requests.get(URL + f'&start={(page_index + 1) * LIMIT}')
+
+
+def extract_jobs(last_page_num):
+    jobs = []
+    for page in range(last_page_num):
+        result = get_page(page)
+        print(result.status_code)
+    return jobs
+
+
 def extract_pages():
     is_end_of_pages, max_page_num, pages = check_is_first_page_last()
     page_index = 0
 
     while not is_end_of_pages:
         if pages[-1].findChild()['aria-label'] == 'Next':  # There are more pages.
-            result = requests.get(URL + f'&start={(page_index + 1) * 50}')
+            result = get_page(page_index)
             soup = BeautifulSoup(result.text, 'html.parser')
             pagination = soup.find('div', class_='pagination')
             pages = pagination('li')
@@ -50,11 +62,3 @@ def extract_pages():
         page_index += 1
 
     return max_page_num
-
-
-# def extract_jobs(last_page_num):
-#     jobs = []
-#     for page in range(last_page_num):
-#         result = requests.get(f'{URL}&start={page*LIMIT}')
-#         print(result.status_code)
-#     return jobs
