@@ -5,10 +5,9 @@ LIMIT = 50
 URL = f'https://www.indeed.com/jobs?q=python&limit={LIMIT}'
 
 
-def extract_indeed_pages():
-    is_end_of_pages = False
+def check_is_first_page_last():
+    is_first_page_last = False
     max_page_num = 0
-    page_index = 0
 
     result = requests.get(URL)
     soup = BeautifulSoup(result.text, 'html.parser')
@@ -22,7 +21,14 @@ def extract_indeed_pages():
 
     if pages[-1].findChild()['aria-label'] != 'Next':
         # First page is the last page
-        is_end_of_pages = True
+        is_first_page_last = True
+
+    return is_first_page_last, max_page_num, pages
+
+
+def extract_pages():
+    is_end_of_pages, max_page_num, pages = check_is_first_page_last()
+    page_index = 0
 
     while not is_end_of_pages:
         if pages[-1].findChild()['aria-label'] == 'Next':  # There are more pages.
@@ -46,9 +52,9 @@ def extract_indeed_pages():
     return max_page_num
 
 
-def extract_indeed_jobs(last_page_num):
-    jobs = []
-    for page in range(last_page_num):
-        result = requests.get(f'{URL}&start={page*LIMIT}')
-        print(result.status_code)
-    return jobs
+# def extract_jobs(last_page_num):
+#     jobs = []
+#     for page in range(last_page_num):
+#         result = requests.get(f'{URL}&start={page*LIMIT}')
+#         print(result.status_code)
+#     return jobs
