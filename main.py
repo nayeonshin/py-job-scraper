@@ -12,12 +12,12 @@ page_index = 0
 is_end_of_pages = False
 li_children = []
 
-indeed_result = requests.get('https://www.indeed.com/jobs?q=python&limit=50')
+indeed_result = requests.get('https://www.indeed.com/jobs?q=python&limit=50&start=100')
 indeed_soup = BeautifulSoup(indeed_result.text, 'html.parser')
 pagination = indeed_soup.find('div', class_='pagination')
 pages = pagination('li')
 
-for i in range(len(pages) - 1):  # Excludes last li, which is the next button
+for i in range(1, len(pages) - 1):  # Excludes previous & next buttons
     child = pages[i].findChild()
     if child.name == 'a':
         li_children.append(child.find('span', class_='pn'))
@@ -33,10 +33,10 @@ print(li_children)
 #         indeed_soup = BeautifulSoup(indeed_result.text, 'html.parser')
 #         pagination = indeed_soup.find('div', class_='pagination')
 #         pages = pagination('li')
-#         # print(pages)
+#         print(pages)
 #     else:
 #         is_end_of_pages = True
 #
 #     page_index += 1
-#     if page_index == 2:
+#     if page_index == 3:
 #         break
