@@ -9,7 +9,7 @@ def parse_spans(response):
     """
     Parse spans from response
     :param response: Response
-    :return: List[Tag]
+    :return: list[Tag]
     """
     soup = BeautifulSoup(response.text, 'html.parser')
     pagination = soup.find('ul', class_='pagination-list')
@@ -20,6 +20,7 @@ def parse_spans(response):
 
     for page in pages:
         temp_spans.append(page.find('span'))
+
     if len(str(temp_spans[0])) == 182:  # Current page
         spans.extend(temp_spans[3:-1])
     else:
@@ -28,19 +29,49 @@ def parse_spans(response):
     return spans
 
 
+def _extract_job(title, company, location):
+    """
+    Return a dictionary whose keys are 'title', 'company', and 'location'
+    :param title: Tag
+    :param company: Tag
+    :param location: Tag
+    :return: dict[str, str]
+    """
+    job = {'title': title.find('span', title=True).string, 'company': company.string}
+
+    if location.string:
+        job['location'] = location.string
+    else:
+        # Trims the opening tag and unnecessary child elements
+        str_location = str(location)[29:]
+        location = ''
+        for char in str_location:
+            if char == '<':
+                break
+            else:
+                location += char
+        job['location'] = location
+
+    return job
+
+
 def extract_jobs(last_page_num):
     """
     ???
     :param last_page_num: int
-    :return: List[???]
+    :return: list[dict[str, str]]
     """
     jobs = []
 
-    response = requests.get(f'{URL}&start={0*LIMIT}')
+    response = requests.get(f'{URL}&start={0 * LIMIT}')
     soup = BeautifulSoup(response.text, 'html.parser')
-    titles = soup.find_all('h2', class_='jobTitle')
-    for title in titles:
-        print(title.find('span', title=True).string)
+    title_elements = soup.find_all('h2', class_='jobTitle')
+    company_elements = soup.find_all('span', class_="companyName")
+    location_elements = soup.find_all('div', class_='companyLocation')
+
+    for i in range(LIMIT):
+        job = _extract_job(title_elements[i], company_elements[i], location_elements[i])
+        jobs.append(job)
 
     return jobs
 
