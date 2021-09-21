@@ -66,7 +66,7 @@ def extract_jobs(last_page_num):
     return jobs
 
 
-def get_last_page_num():
+def get_max_page_num():
     """
     Get the last page's number at URL
     :return: int
