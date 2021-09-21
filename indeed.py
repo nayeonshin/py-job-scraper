@@ -29,7 +29,7 @@ def parse_spans(response):
     return spans
 
 
-def _extract_job(title, company, location):
+def _extract_job(title, company, location, job_id):
     """
     Return a dictionary of a job's information
     :param title: Tag
@@ -40,7 +40,8 @@ def _extract_job(title, company, location):
     return {
         'title': title.find('span', title=True).string,
         'company': company.string,
-        'location': location.text
+        'location': location.text,
+        'link': f'https://www.indeed.com/viewjob?jk={job_id}&tk=1fg49gh9apiab801&from=serp&vjs=3'
     }
 
 
@@ -52,16 +53,23 @@ def extract_jobs(last_page_num):
     """
     jobs = []
 
-    response = requests.get(f'{URL}&start={0 * LIMIT}')
-    soup = BeautifulSoup(response.text, 'html.parser')
-    title_elements = soup.find_all('h2', class_='jobTitle')
-    company_elements = soup.find_all('span', class_="companyName")
-    location_elements = soup.find_all('div', class_='companyLocation')
+    for i in range(last_page_num):
+        print(f'Scrapping page {i}...')
+        response = requests.get(f'{URL}&start={i * LIMIT}')
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-    for i in range(LIMIT):
-        job = _extract_job(title_elements[i], company_elements[i],
-                           location_elements[i])
-        jobs.append(job)
+        title_elements = soup.find_all('h2', class_='jobTitle')
+        company_elements = soup.find_all('span', class_='companyName')
+        location_elements = soup.find_all('div', class_='companyLocation')
+        job_id_containers = soup.find_all('div', class_='slider_container')
+        job_ids = [
+            container.parent['data-jk'] for container in job_id_containers
+        ]
+
+        for i in range(LIMIT):
+            job = _extract_job(title_elements[i], company_elements[i],
+                               location_elements[i], job_ids[i])
+            jobs.append(job)
 
     return jobs
 
