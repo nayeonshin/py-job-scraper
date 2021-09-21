@@ -15,9 +15,9 @@ def _check_is_first_page_end():
     pagination = soup.find('div', class_='pagination')
 
     nav_items = pagination.find_all('li')
-    # Gets the 'aria-label' value of li's child elements into a list
+    # Gets the 'aria-label' values of li's child elements into a list
     item_labels = [item.findChild()['aria-label'] for item in nav_items]
-    # If 'Next' is not in nav, the first page is indeed the last page.
+    # If 'Next' is not in nav, the first page is really the last page.
     return 'Next' not in item_labels
 
 
@@ -39,7 +39,8 @@ def get_last_page_num():
 
         nav_items = pagination.find_all('li')
         item_labels = [item.findChild()['aria-label'] for item in nav_items]
-        # If 'Next' is in item_labels, is_last_page becomes False. Otherwise, is_last_page becomes True.
+        # If 'Next' is in item_labels, is_last_page becomes False.
+        # Otherwise, is_last_page becomes True.
         is_last_page = False if 'Next' in item_labels else True
 
         page_index += 1
