@@ -31,8 +31,8 @@ def parse_spans(response):
 
 def _extract_job(html):
     """
-    Return a dictionary of a job's information
-    :param html: ???
+    Get a dictionary of a job's information
+    :param html: Tag
     :return: dict[str, str]
     """
     title = html.find('span', title=True).string
@@ -50,7 +50,7 @@ def _extract_job(html):
 
 def extract_jobs(last_page_num):
     """
-    ???
+    Get a list of job info's dictionaries
     :param last_page_num: int
     :return: list[dict[str, str]]
     """
