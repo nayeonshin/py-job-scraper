@@ -31,28 +31,17 @@ def parse_spans(response):
 
 def _extract_job(title, company, location):
     """
-    Return a dictionary whose keys are 'title', 'company', and 'location'
+    Return a dictionary of a job's information
     :param title: Tag
     :param company: Tag
     :param location: Tag
     :return: dict[str, str]
     """
-    job = {'title': title.find('span', title=True).string, 'company': company.string}
-
-    if location.string:
-        job['location'] = location.string
-    else:
-        # Trims the opening tag and unnecessary child elements
-        str_location = str(location)[29:]
-        location = ''
-        for char in str_location:
-            if char == '<':
-                break
-            else:
-                location += char
-        job['location'] = location
-
-    return job
+    return {
+        'title': title.find('span', title=True).string,
+        'company': company.string,
+        'location': location.text
+    }
 
 
 def extract_jobs(last_page_num):
@@ -70,7 +59,8 @@ def extract_jobs(last_page_num):
     location_elements = soup.find_all('div', class_='companyLocation')
 
     for i in range(LIMIT):
-        job = _extract_job(title_elements[i], company_elements[i], location_elements[i])
+        job = _extract_job(title_elements[i], company_elements[i],
+                           location_elements[i])
         jobs.append(job)
 
     return jobs
