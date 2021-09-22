@@ -7,7 +7,7 @@ URL = f'https://www.indeed.com/jobs?q=python&limit={LIMIT}'
 
 def _check_has_first_page_end():
     """
-    Check if the first page is the last page
+    Check if the first page contains a link to the last page
     :return: bool
     """
     first_response = requests.get(URL)
@@ -17,7 +17,7 @@ def _check_has_first_page_end():
     nav_items = pagination.find_all('li')
     # Gets the 'aria-label' values of li's child elements into a list
     item_labels = [item.findChild()['aria-label'] for item in nav_items]
-    # If 'Next' is not in nav, the first page is really the last page.
+    # If 'Next' is not in nav, the first page has the last page link
     return 'Next' not in item_labels
 
 
