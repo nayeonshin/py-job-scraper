@@ -5,7 +5,7 @@ LIMIT = 50
 URL = f'https://www.indeed.com/jobs?q=python&limit={LIMIT}'
 
 
-def _check_is_first_page_end():
+def _check_has_first_page_end():
     """
     Check if the first page is the last page
     :return: bool
@@ -26,7 +26,7 @@ def get_last_page_num():
     Get the last page number
     :return: int
     """
-    is_last_page = _check_is_first_page_end()
+    is_last_page = _check_has_first_page_end()
     item_labels = []
     page_index = 0
 
