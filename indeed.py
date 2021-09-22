@@ -7,7 +7,7 @@ URL = f'https://www.indeed.com/jobs?q=python&limit={LIMIT}'
 
 def _check_has_first_page_end():
     """
-    Check if the first page contains a link to the last page
+    Check if the first page has a link to the last page
     :return: bool
     """
     first_response = requests.get(URL)
@@ -17,7 +17,7 @@ def _check_has_first_page_end():
     nav_items = pagination.find_all('li')
     # Gets the 'aria-label' values of li's child elements into a list
     item_labels = [item.findChild()['aria-label'] for item in nav_items]
-    # If 'Next' is not in nav, the first page has the last page link
+    # If 'Next' is not in nav, the first page has the last page link.
     return 'Next' not in item_labels
 
 
@@ -80,7 +80,7 @@ def extract_jobs(last_page_num):
         response = requests.get(f'{URL}&start={i * LIMIT}')
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        job_containers = soup.find_all('div', class_='slider_container')
+        job_containers = soup('div', class_='slider_container')
         for job_container in job_containers:
             jobs.append(_extract_job(job_container))
 
