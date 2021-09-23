@@ -101,6 +101,10 @@ def extract_jobs(last_page_num):
 
 
 def get_jobs():
+    """
+    Extract jobs until the last page
+    :return: list[dict[str, str]]
+    """
     last_page_num = extract_last_page_num()
     jobs = extract_jobs(last_page_num)
     return jobs

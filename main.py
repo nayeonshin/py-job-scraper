@@ -1,5 +1,4 @@
-from indeed import *
+from indeed import get_jobs as get_indeed_jobs
 
-last_indeed_page_num = get_last_page_num()
-indeed_jobs = extract_jobs(last_indeed_page_num)
+indeed_jobs = get_indeed_jobs()
 print(indeed_jobs)
