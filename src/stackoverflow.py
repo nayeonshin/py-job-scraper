@@ -57,7 +57,7 @@ def extract_jobs(last_page_num):
         for element in job_elements:
             job = _extract_job(element)
             if list(job.values()) == ['', '', '', '']:
-                # There's no title, company, location, and link
+                # There's no title, company, location, and link.
                 continue
             else:
                 jobs.append(job)
