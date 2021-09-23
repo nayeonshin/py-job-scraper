@@ -12,6 +12,22 @@ def extract_last_page_num():
     return int(last_page_num)
 
 
+def _extract_job(html):
+    title_element = html.find('h2')
+    company_and_location_element = html.find('h3')
+    title = company = location = ''
+    if title_element:
+        title = title_element.find('a')['title']
+    if company_and_location_element:
+        company_element, location_element = company_and_location_element.find_all('span', recursive=False)
+        company, location = company_element.get_text(strip=True), location_element.get_text(strip=True)
+        print(company)
+        print(location)
+    # return {
+    #   'title': title
+    # }
+
+
 def extract_jobs(last_page_num):
     jobs = []
     for page in range(1, last_page_num + 1):
@@ -19,7 +35,9 @@ def extract_jobs(last_page_num):
         soup = BeautifulSoup(response.text, 'html.parser')
         job_elements = soup.find_all('div', class_='fl1')
         for element in job_elements:
-            print(element.text)
+            job = _extract_job(element)
+            jobs.append(job)
+    return jobs
 
 
 def get_jobs():
