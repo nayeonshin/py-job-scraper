@@ -35,8 +35,9 @@ def _extract_job(html):
 
 def extract_jobs(last_page_num):
     jobs = []
-    for page in range(1, last_page_num + 1):
-        response = requests.get(f'{URL}&pg={page}')
+    for i in range(1, last_page_num + 1):
+        print(f'Scraping Stack Overflow page {i}')
+        response = requests.get(f'{URL}&pg={i}')
         soup = BeautifulSoup(response.text, 'html.parser')
         job_elements = soup.find_all('div', class_='fl1')
         for element in job_elements:
@@ -49,6 +50,3 @@ def get_jobs():
     last_page_num = extract_last_page_num()
     jobs = extract_jobs(last_page_num)
     return jobs
-
-
-get_jobs()
