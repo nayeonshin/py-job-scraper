@@ -15,15 +15,22 @@ def extract_last_page_num():
 def _extract_job(html):
     title_element = html.find('h2')
     company_and_location_element = html.find('h3')
-    title = company = location = ''
+    title = company = location = job_link = ''
     if title_element:
-        title = title_element.find('a')['title']
+        a = title_element.find('a')
+        title = a['title']
+        job_link = 'https://stackoverflow.com/' + a['href']
     if company_and_location_element:
         company_element, location_element = company_and_location_element.find_all(
             'span', recursive=False)
         company, location = company_element.get_text(
             strip=True), location_element.get_text(strip=True)
-    return {'title': title, 'company': company, 'location': location}
+    return {
+        'title': title,
+        'company': company,
+        'location': location,
+        'job url': job_link
+    }
 
 
 def extract_jobs(last_page_num):
