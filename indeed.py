@@ -93,7 +93,7 @@ def extract_jobs(last_page_num):
         response = requests.get(f'{URL}&start={i * LIMIT}')
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        job_containers = soup('div', class_='slider_container')
+        job_containers = soup.find_all('div', class_='slider_container')
         for job_container in job_containers:
             jobs.append(_extract_job(job_container))
 
