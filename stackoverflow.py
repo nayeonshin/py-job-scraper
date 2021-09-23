@@ -19,13 +19,11 @@ def _extract_job(html):
     if title_element:
         title = title_element.find('a')['title']
     if company_and_location_element:
-        company_element, location_element = company_and_location_element.find_all('span', recursive=False)
-        company, location = company_element.get_text(strip=True), location_element.get_text(strip=True)
-        print(company)
-        print(location)
-    # return {
-    #   'title': title
-    # }
+        company_element, location_element = company_and_location_element.find_all(
+            'span', recursive=False)
+        company, location = company_element.get_text(
+            strip=True), location_element.get_text(strip=True)
+    return {'title': title, 'company': company, 'location': location}
 
 
 def extract_jobs(last_page_num):
