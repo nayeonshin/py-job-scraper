@@ -21,7 +21,7 @@ def _check_has_first_page_end():
     return 'Next' not in item_labels
 
 
-def get_last_page_num():
+def extract_last_page_num():
     """
     Get the last page number
     :return: int
@@ -48,6 +48,15 @@ def get_last_page_num():
     return int(item_labels[-1])
 
 
+def format_location(location):
+    """
+    Get a location with spaces around plus and template
+    :param location: str
+    :return: str
+    """
+    return location.replace('+', ' + ').replace('•', ' • ')
+
+
 def _extract_job(html):
     """
     Get a dictionary of a job's information
@@ -56,14 +65,18 @@ def _extract_job(html):
     """
     title = html.find('span', title=True).string
     company = html.find('span', class_='companyName').string
-    location = html.find('div', class_='companyLocation').text
+    location = format_location(html.find('div', class_='companyLocation').text)
     job_id = html.parent['data-jk']
 
     return {
-      'title': title,
-      'company': company,
-      'location': location,
-      'link': f'https://www.indeed.com/viewjob?jk={job_id}&tk=1fg49gh9apiab801&from=serp&vjs=3'
+        'title':
+        title,
+        'company':
+        company,
+        'location':
+        location,
+        'link':
+        f'https://www.indeed.com/viewjob?jk={job_id}&tk=1fg49gh9apiab801&from=serp&vjs=3'
     }
 
 
@@ -84,4 +97,10 @@ def extract_jobs(last_page_num):
         for job_container in job_containers:
             jobs.append(_extract_job(job_container))
 
+    return jobs
+
+
+def get_jobs():
+    last_page_num = extract_last_page_num()
+    jobs = extract_jobs(last_page_num)
     return jobs
