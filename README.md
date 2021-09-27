@@ -8,4 +8,4 @@ Py Job Scraper scrapes and writes into a CSV file titles, company names, locatio
 
 ## Result in a Google Sheet
 
-![Result in a Google Sheet]()
+![Result in a Google Sheet](https://github.com/nayeonshin/py-job-scraper/blob/main/assets/result.png)
