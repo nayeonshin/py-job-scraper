@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-URL = f'https://stackoverflow.com/jobs?q=python'
+URL = 'https://stackoverflow.com/jobs?q=python'
 
 
 def extract_last_page_num():
