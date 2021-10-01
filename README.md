@@ -1,6 +1,6 @@
 # Py Job Scraper
 
-Py Job Scraper scrapes and writes into a CSV file titles, company names, locations, and job-specific links of Python jobs on Indeed and Stack Overflow.
+Py Job Scraper is a Python job scraper in Python. scrapes and writes into a CSV file titles, company names, locations, and job-specific links of Python jobs on Indeed and Stack Overflow.
 
 ## Required Package & Library
 - BeautifulSoup4
