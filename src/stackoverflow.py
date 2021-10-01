@@ -4,7 +4,7 @@ import requests
 URL = 'https://stackoverflow.com/jobs?q=python'
 
 
-def extract_last_page_num():
+def _extract_last_page_num():
     """
     Get the last page number
     :return: int
@@ -42,7 +42,7 @@ def _extract_job(html):
     }
 
 
-def extract_jobs(last_page_num):
+def _extract_jobs(last_page_num):
     """
     Get a list of job info's dictionaries
     :param last_page_num: int
@@ -69,6 +69,6 @@ def get_jobs():
     Extract jobs until the last page
     :return: list[dict[str, str]]
     """
-    last_page_num = extract_last_page_num()
-    jobs = extract_jobs(last_page_num)
+    last_page_num = _extract_last_page_num()
+    jobs = _extract_jobs(last_page_num)
     return jobs

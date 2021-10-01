@@ -21,7 +21,7 @@ def _check_has_first_page_end():
     return 'Next' not in item_labels
 
 
-def extract_last_page_num():
+def _extract_last_page_num():
     """
     Get the last page number
     :return: int
@@ -48,7 +48,7 @@ def extract_last_page_num():
     return int(item_labels[-1])
 
 
-def format_location(location):
+def _format_location(location):
     """
     Get a location with spaces around plus and template
     :param location: str
@@ -65,7 +65,7 @@ def _extract_job(html):
     """
     title = html.find('span', title=True).string
     company = html.find('span', class_='companyName').string
-    location = format_location(html.find('div', class_='companyLocation').text)
+    location = _format_location(html.find('div', class_='companyLocation').text)
     job_id = html.parent['data-jk']
 
     return {
@@ -80,7 +80,7 @@ def _extract_job(html):
     }
 
 
-def extract_jobs(last_page_num):
+def _extract_jobs(last_page_num):
     """
     Get a list of job info's dictionaries
     :param last_page_num: int
@@ -105,6 +105,6 @@ def get_jobs():
     Extract jobs until the last page
     :return: list[dict[str, str]]
     """
-    last_page_num = extract_last_page_num()
-    jobs = extract_jobs(last_page_num)
+    last_page_num = _extract_last_page_num()
+    jobs = _extract_jobs(last_page_num)
     return jobs
