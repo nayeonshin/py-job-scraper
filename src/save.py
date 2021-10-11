@@ -7,7 +7,7 @@ def save_to_file(jobs):
     :param jobs: list[dict[str, str]]
     :return: None
     """
-    file = open('Python-Jobs.csv', mode='w', encoding="utf-8", newline='')
+    file = open('Python-Jobs.csv', mode='w', encoding='utf-8', newline='')
     writer = csv.writer(file)
     writer.writerow(['title', 'company', 'location', 'link'])
     for job in jobs:
