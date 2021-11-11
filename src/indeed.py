@@ -12,7 +12,6 @@ def _check_has_first_page_end() -> bool:
     pagination = soup.find("div", class_="pagination")
 
     nav_items = pagination.find_all("li")
-    # Gets the 'aria-label' values of li's child elements into a list
     item_labels = [item.findChild()["aria-label"] for item in nav_items]
     # If 'Next' is not in nav, the first page has the last page link.
     return "Next" not in item_labels
@@ -25,16 +24,12 @@ def _extract_last_page_num() -> int:
     page_index = 0
 
     while not is_last_page:
-        # Starting at https://www.indeed.com/jobs?q=python&limit=50&start=0,
-        # sends a GET request to the url with a different '&start=' number
         response = requests.get(URL + f"&start={page_index * LIMIT}")
         soup = BeautifulSoup(response.text, "html.parser")
         pagination = soup.find("div", class_="pagination")
 
         nav_items = pagination.find_all("li")
         item_labels = [item.findChild()["aria-label"] for item in nav_items]
-        # If 'Next' is in item_labels, is_last_page becomes False.
-        # Otherwise, is_last_page becomes True.
         is_last_page = False if "Next" in item_labels else True
 
         page_index += 1
